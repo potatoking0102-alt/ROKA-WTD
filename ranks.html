@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>백골부대 - 계급 체계</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Malgun Gothic', sans-serif;
+        }
+        body {
+            background-color: #0d1210;
+            color: #dcdcdc;
+            overflow-x: hidden;
+        }
+
+        /* 상단 네비게이션 */
+        nav {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #111a15;
+            border-bottom: 3px solid #2d4537;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .nav-brand img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #557a62;
+        }
+        .nav-logo-text {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        .nav-logo-text span {
+            color: #557a62;
+            font-size: 0.85rem;
+            display: block;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #c0c0c0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: bold;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #6da381;
+        }
+
+        /* 실시간 검색창 */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: #16221b;
+            border: 1px solid #2d4537;
+            border-radius: 2px;
+            padding: 4px 10px;
+        }
+        .search-container input {
+            background: none;
+            border: none;
+            color: #fff;
+            outline: none;
+            font-size: 0.85rem;
+            padding-left: 5px;
+            width: 140px;
+        }
+        .search-container button {
+            background: none;
+            border: none;
+            color: #6da381;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* 콘텐츠 영역 */
+        .content-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+            min-height: 70vh;
+        }
+        .card {
+            background-color: #131a16;
+            border: 1px solid #202e26;
+            border-left: 4px solid #557a62;
+            padding: 30px;
+            border-radius: 3px;
+        }
+        .card h2 {
+            color: #8abfa0;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #202e26;
+            padding-bottom: 8px;
+        }
+        .card p {
+            color: #b8c4bd;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        /* 계급 그리드 */
+        .rank-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .rank-item {
+            background-color: #17211b;
+            border: 1px solid #25362c;
+            padding: 12px 16px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .rank-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .rank-name {
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+        .rank-code {
+            font-size: 0.75rem;
+            color: #839b8c;
+        }
+
+        #noResult {
+            display: none;
+            text-align: center;
+            color: #839b8c;
+            padding: 30px;
+            font-size: 1rem;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #070a08;
+            color: #66786e;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            border-top: 2px solid #16221b;
+            line-height: 1.6;
+        }
+        footer span {
+            color: #8abfa0;
+            font-weight: bold;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .nav-links {
+                gap: 15px;
+            }
+            .nav-links a {
+                font-size: 0.85rem;
+            }
+            .search-container {
+                width: 100%;
+                justify-content: center;
+            }
+            .search-container input {
+                width: 80%;
+            }
+            .content-container {
+                margin: 30px auto;
+                padding: 0 15px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .rank-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 네비게이션 -->
+    <nav>
+        <div class="nav-brand" onclick="location.href='index.html'">
+            <img src="image_0beff3.jpg" alt="로고" onerror="this.style.display='none'">
+            <div class="nav-logo-text">
+                백골부대
+                <span>WHITE TIGER DIVISION</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">홈으로</a></li>
+            <li><a href="ranks.html" class="active">계급체계</a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="계급/직책 검색..." oninput="filterRanks()" onkeypress="handleSearch(event)">
+            <button onclick="filterRanks()">🔍</button>
+        </div>
+    </nav>
+
+    <!-- 본문 내용 -->
+    <div class="content-container">
+        <div class="card">
+            <h2>계급 체계 및 직책</h2>
+            <p>백골부대 디스코드 및 인게임에서 운영되는 주요 직책 및 계급 구조입니다. 검색창에 계급이나 코드를 입력해 보세요.</p>
+            
+            <div class="rank-grid" id="rankGrid">
+                <div class="rank-item" data-text="대통령 potus">
+                    <div class="rank-dot" style="background-color: #ff6b6b;"></div>
+                    <div>
+                        <span class="rank-name">대통령</span>
+                        <span class="rank-code">POTUS</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="국무총리 pm">
+                    <div class="rank-dot" style="background-color: #9b59b6;"></div>
+                    <div>
+                        <span class="rank-name">국무총리</span>
+                        <span class="rank-code">PM</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="국방부 장관 mnd">
+                    <div class="rank-dot" style="background-color: #3498db;"></div>
+                    <div>
+                        <span class="rank-name">국방부 장관</span>
+                        <span class="rank-code">MND</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="육군참모총장 csa">
+                    <div class="rank-dot" style="background-color: #c0392b;"></div>
+                    <div>
+                        <span class="rank-name">육군참모총장</span>
+                        <span class="rank-code">CSA</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="육군참모차장 vc">
+                    <div class="rank-dot" style="background-color: #d35400;"></div>
+                    <div>
+                        <span class="rank-name">육군참모차장</span>
+                        <span class="rank-code">VC...</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="육군 주임원사 csm">
+                    <div class="rank-dot" style="background-color: #85c1e9;"></div>
+                    <div>
+                        <span class="rank-name">육군 주임원사</span>
+                        <span class="rank-code">CSM</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="장성급 영관급 위관급 장교 officers">
+                    <div class="rank-dot" style="background-color: #2ecc71;"></div>
+                    <div>
+                        <span class="rank-name">장성급 / 영관급 / 위관급 장교</span>
+                        <span class="rank-code">Officers</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="육군사관학교 kma">
+                    <div class="rank-dot" style="background-color: #34495e;"></div>
+                    <div>
+                        <span class="rank-name">육군사관학교</span>
+                        <span class="rank-code">KMA</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="조교 di">
+                    <div class="rank-dot" style="background-color: #e74c3c;"></div>
+                    <div>
+                        <span class="rank-name">조교</span>
+                        <span class="rank-code">DI</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="군사경찰 군경 mp">
+                    <div class="rank-dot" style="background-color: #2980b9;"></div>
+                    <div>
+                        <span class="rank-name">군사경찰 (군경)</span>
+                        <span class="rank-code">MP</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="특전사 swc">
+                    <div class="rank-dot" style="background-color: #566573;"></div>
+                    <div>
+                        <span class="rank-name">특전사</span>
+                        <span class="rank-code">SWC</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="수방사 cdc">
+                    <div class="rank-dot" style="background-color: #8e44ad;"></div>
+                    <div>
+                        <span class="rank-name">수방사</span>
+                        <span class="rank-code">CDC</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="취사병 cs">
+                    <div class="rank-dot" style="background-color: #d35400;"></div>
+                    <div>
+                        <span class="rank-name">취사병</span>
+                        <span class="rank-code">CS</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="방첩사 dcc">
+                    <div class="rank-dot" style="background-color: #f5b7b1;"></div>
+                    <div>
+                        <span class="rank-name">방첩사</span>
+                        <span class="rank-code">DCC</span>
+                    </div>
+                </div>
+                <div class="rank-item" data-text="일반 인원 육군 army general">
+                    <div class="rank-dot" style="background-color: #27ae60;"></div>
+                    <div>
+                        <span class="rank-name">일반 인원 / 육군</span>
+                        <span class="rank-code">Army / General</span>
+                    </div>
+                </div>
+            </div>
+            <div id="noResult">검색된 계급이나 직책이 없습니다.</div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer>
+        <p><span>백골부대 (White Tiger Division)</span> | Roblox Military Roleplay Community</p>
+        <p>본 사이트는 로블록스 가상 군사 RP 커뮤니티 전용 공식 웹사이트입니다.</p>
+        <p>&copy; 백골부대 All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function filterRanks() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const items = document.querySelectorAll('.rank-item');
+            const noResult = document.getElementById('noResult');
+            let matchCount = 0;
+
+            items.forEach(item => {
+                const text = item.getAttribute('data-text').toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'flex';
+                    matchCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            if (matchCount === 0) {
+                noResult.style.display = 'block';
+            } else {
+                noResult.style.display = 'none';
+            }
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                filterRanks();
+            }
+        }
+    </script>
+</body>
+</html>
