@@ -104,42 +104,44 @@
             cursor: pointer;
         }
 
-        /* 슬라이드 전체 메뉴 모달 */
+        /* 슬라이드 전체 메뉴 모달 (가운데 정렬) */
         .side-menu {
             position: fixed;
             top: 0;
-            right: -300px;
-            width: 300px;
+            right: -320px;
+            width: 320px;
             height: 100vh;
             background-color: #131a16;
             border-left: 2px solid #2d4537;
             box-shadow: -5px 0 15px rgba(0,0,0,0.7);
             z-index: 2000;
             transition: right 0.3s ease;
-            padding: 60px 30px;
+            padding: 80px 30px;
+            text-align: center; /* 전체 가운데 정렬 */
         }
         .side-menu.active {
             right: 0;
         }
         .side-menu h3 {
             color: #8abfa0;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
+            font-size: 1.25rem;
+            margin-bottom: 30px;
             border-bottom: 1px solid #202e26;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
         }
         .side-menu ul {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
         }
         .side-menu ul a {
             color: #dcdcdc;
             text-decoration: none;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: bold;
             transition: color 0.2s;
+            display: block;
         }
         .side-menu ul a:hover {
             color: #6da381;
@@ -289,7 +291,7 @@
         </div>
         <div class="nav-right">
             <div class="search-box">
-                <input type="text" id="mainSearch" placeholder="검색..." onkeypress="handleSearch(event)">
+                <input type="text" id="mainSearch" placeholder="사이트 통합 검색..." onkeypress="handleSearch(event)">
                 <button onclick="executeSearch()">🔍</button>
             </div>
             <button class="menu-btn" onclick="toggleMenu()">
@@ -298,14 +300,14 @@
         </div>
     </nav>
 
-    <!-- 사이드 전체 메뉴 -->
+    <!-- 사이드 전체 메뉴 (가운데 정렬 및 링크 클릭 시 메뉴 닫힘 적용) -->
     <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <button class="close-btn" onclick="toggleMenu()">×</button>
         <h3>전체 메뉴</h3>
         <ul>
-            <li><a href="index.html">홈으로 이동</a></li>
-            <li><a href="ranks.html">계급체계 및 규정</a></li>
+            <li><a href="index.html" onclick="toggleMenu()">홈으로 이동</a></li>
+            <li><a href="ranks.html" onclick="toggleMenu()">계급체계 및 규정</a></li>
         </ul>
     </div>
 
@@ -316,7 +318,7 @@
         <a href="ranks.html" class="hero-btn">규정 및 계급 확인하기</a>
     </header>
 
-    <!-- 하단 소개 카드 섹션 (대통령 소개 추가) -->
+    <!-- 하단 소개 카드 섹션 (대통령 소개 포함) -->
     <section class="info-section">
         <div class="info-card">
             <h3>대통령실 통수권 소개</h3>
@@ -350,6 +352,8 @@
         function executeSearch() {
             const query = document.getElementById('mainSearch').value.trim();
             if (query) {
+                // 직책 검색이 아닌 일반 통합 검색 안내 및 페이지 이동 처리
+                alert(`"${query}" 통합 검색을 수행합니다. (세부 직책 검색은 계급/규정 페이지를 이용해 주세요.)`);
                 location.href = `ranks.html?search=${encodeURIComponent(query)}`;
             }
         }
