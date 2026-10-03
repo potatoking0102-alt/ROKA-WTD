@@ -58,7 +58,7 @@
             display: block;
         }
 
-        /* 우측 유틸리티 영역 (메뉴 버튼 + 검색) */
+        /* 우측 유틸리티 영역 */
         .nav-right {
             display: flex;
             align-items: center;
@@ -117,7 +117,7 @@
             z-index: 2000;
             transition: right 0.3s ease;
             padding: 80px 30px;
-            text-align: center; /* 전체 가운데 정렬 */
+            text-align: center;
         }
         .side-menu.active {
             right: 0;
@@ -214,7 +214,7 @@
             transform: translateY(-2px);
         }
 
-        /* 정보 카드 섹션 (대통령 소개 포함) */
+        /* 정보 카드 섹션 */
         .info-section {
             max-width: 1100px;
             margin: -60px auto 80px auto;
@@ -291,7 +291,7 @@
         </div>
         <div class="nav-right">
             <div class="search-box">
-                <input type="text" id="mainSearch" placeholder="사이트 통합 검색..." onkeypress="handleSearch(event)">
+                <input type="text" id="mainSearch" placeholder="통합 검색..." onkeypress="handleSearch(event)">
                 <button onclick="executeSearch()">🔍</button>
             </div>
             <button class="menu-btn" onclick="toggleMenu()">
@@ -300,13 +300,12 @@
         </div>
     </nav>
 
-    <!-- 사이드 전체 메뉴 (가운데 정렬 및 링크 클릭 시 메뉴 닫힘 적용) -->
+    <!-- 사이드 전체 메뉴 ("홈으로 이동" 삭제 및 가운데 정렬) -->
     <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <button class="close-btn" onclick="toggleMenu()">×</button>
         <h3>전체 메뉴</h3>
         <ul>
-            <li><a href="index.html" onclick="toggleMenu()">홈으로 이동</a></li>
             <li><a href="ranks.html" onclick="toggleMenu()">계급체계 및 규정</a></li>
         </ul>
     </div>
@@ -318,7 +317,7 @@
         <a href="ranks.html" class="hero-btn">규정 및 계급 확인하기</a>
     </header>
 
-    <!-- 하단 소개 카드 섹션 (대통령 소개 포함) -->
+    <!-- 하단 소개 카드 섹션 -->
     <section class="info-section">
         <div class="info-card">
             <h3>대통령실 통수권 소개</h3>
@@ -352,9 +351,7 @@
         function executeSearch() {
             const query = document.getElementById('mainSearch').value.trim();
             if (query) {
-                // 직책 검색이 아닌 일반 통합 검색 안내 및 페이지 이동 처리
-                alert(`"${query}" 통합 검색을 수행합니다. (세부 직책 검색은 계급/규정 페이지를 이용해 주세요.)`);
-                location.href = `ranks.html?search=${encodeURIComponent(query)}`;
+                alert(`"${query}" 통합 검색을 수행합니다.`);
             }
         }
 
